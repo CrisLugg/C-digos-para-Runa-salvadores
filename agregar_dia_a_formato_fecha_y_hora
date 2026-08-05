@@ -1,0 +1,58 @@
+let entrada = `{{fecha_hoy}}`;
+
+function diaSemana(year, month, day) {
+  if (month < 3) {
+    month += 12;
+    year--;
+  }
+
+  let k = year % 100;
+  let j = Math.floor(year / 100);
+
+  let h = (
+    day +
+    Math.floor((13 * (month + 1)) / 5) +
+    k +
+    Math.floor(k / 4) +
+    Math.floor(j / 4) +
+    (5 * j)
+  ) % 7;
+
+  let dias = [
+    "sábado",
+    "domingo",
+    "lunes",
+    "martes",
+    "miércoles",
+    "jueves",
+    "viernes"
+  ];
+
+  return dias[h];
+}
+
+function formatearFecha(texto) {
+  if (!texto || typeof texto !== "string") {
+    return "";
+  }
+
+  let regex = /(\d{2})-(\d{2})-(\d{4}),\s*(\d{2})-(\d{2})\s*(AM|PM)/i;
+  let match = texto.match(regex);
+
+  if (!match) {
+    return texto;
+  }
+
+  let day = Number(match[1]);
+  let month = Number(match[2]);
+  let year = Number(match[3]);
+  let hour = Number(match[4]);
+  let minute = match[5];
+  let ampm = match[6].toUpperCase();
+
+  let dia = diaSemana(year, month, day);
+
+  return `${dia}, ${day}-${String(month).padStart(2, "0")}-${year}, ${String(hour).padStart(2, "0")}:${minute} ${ampm}`;
+}
+
+return formatearFecha(entrada);
